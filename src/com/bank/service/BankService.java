@@ -3,6 +3,7 @@ package com.bank.service;
 import com.bank.exception.AccountNotFoundException;
 import com.bank.exception.InsufficientFundsException;
 import com.bank.model.Account;
+import java.io.IOException;
 import java.util.Collection;
 
 public interface BankService {
@@ -20,4 +21,9 @@ public interface BankService {
     Account getAccount(String accountNumber) throws AccountNotFoundException;
 
     Collection<Account> getAllAccounts();
+
+    // Persistence
+    boolean load() throws IOException;
+
+    void save() throws IOException;
 }

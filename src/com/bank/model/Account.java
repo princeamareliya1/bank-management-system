@@ -42,6 +42,15 @@ public abstract class Account {
         return Collections.unmodifiableList(transactions);
     }
 
+    /**
+     * Replaces the transaction history. Used only by BankPersistence when
+     * restoring accounts from the data file.
+     */
+    void setTransactions(List<Transaction> history) {
+        this.transactions.clear();
+        this.transactions.addAll(history);
+    }
+
     public void deposit(double amount) {
         if (amount <= 0) {
             throw new IllegalArgumentException("Deposit amount must be positive.");

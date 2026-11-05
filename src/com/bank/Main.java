@@ -5,6 +5,7 @@ import com.bank.exception.InsufficientFundsException;
 import com.bank.model.Account;
 import com.bank.service.BankService;
 import com.bank.service.BankServiceImpl;
+import java.io.IOException;
 import java.util.Collection;
 import java.util.Scanner;
 
@@ -13,7 +14,14 @@ public class Main {
     private static final Scanner scanner = new Scanner(System.in);
 
     public static void main(String[] args) {
-        seedDemoData();
+        try {
+            boolean hadSavedData = bankService.load();
+            if (!hadSavedData) {
+                seedDemoData();
+            }
+        } catch (IOException e) {
+            System.out.println("Warning: could not load saved data (" + e.getMessage() + "). Starting with an empty account list.");
+        }
         printBanner();
 
         boolean running = true;
@@ -51,6 +59,12 @@ public class Main {
                 default:
                     System.out.println("❌ Invalid selection! Please enter a number between 1 and 8.\n");
             }
+        }
+
+        try {
+            bankService.save();
+        } catch (IOException e) {
+            System.out.println("Warning: could not save data: " + e.getMessage());
         }
     }
 

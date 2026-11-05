@@ -3,8 +3,10 @@ package com.bank.service;
 import com.bank.exception.AccountNotFoundException;
 import com.bank.exception.InsufficientFundsException;
 import com.bank.model.Account;
+import com.bank.model.BankPersistence;
 import com.bank.model.CurrentAccount;
 import com.bank.model.SavingsAccount;
+import java.io.IOException;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -76,5 +78,16 @@ public class BankServiceImpl implements BankService {
     @Override
     public Collection<Account> getAllAccounts() {
         return Collections.unmodifiableCollection(accounts.values());
+    }
+
+    // Persistence
+    public boolean load() throws IOException {
+        accounts.clear();
+        accounts.putAll(BankPersistence.load());
+        return !accounts.isEmpty();
+    }
+
+    public void save() throws IOException {
+        BankPersistence.save(accounts);
     }
 }
